@@ -25,12 +25,12 @@ function cleanup {
 cleanup
 
 echo "Download"
-url="${url}$(TZ='GMT' date -d '20 minutes ago' "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d '20 minutes ago' '+%M') '\na-a%10' | bc))00"
+url="${url}$(TZ='GMT' date -d '30 minutes ago' "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d '30 minutes ago' '+%M') '\na-a%10' | bc))00"
 for((x=0;x<$tiles;x++)); do 
     for((y=0;y<$tiles;y++)); do 
-        echo "${url}_${x}_${y}.png -O $x$y.png -q"; 
+        echo "${url}_${x}_${y}.png -q -O" "$workdir$x$y.png"; 
     done; 
-done | xargs -P 32 -n 4 wget
+done | xargs -P 1 -n 4 wget || (echo "Failed to download images"; exit 1)
 
 echo "Merge"
 montage -tile ${tiles} -geometry +0+0 $(
