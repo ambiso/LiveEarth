@@ -30,7 +30,7 @@ for((x=0;x<$tiles;x++)); do
     for((y=0;y<$tiles;y++)); do 
         echo "${url}_${x}_${y}.png -q -O" "$workdir$x$y.png"; 
     done; 
-done | xargs -P 1 -n 4 wget || (echo "Failed to download images"; exit 1)
+done | xargs -P 32 -n 4 wget || (echo "Failed to download images"; exit 1)
 
 echo "Merge"
 montage -tile ${tiles} -geometry +0+0 $(
