@@ -26,7 +26,6 @@ cleanup
 
 echo "Download"
 url="${url}$(TZ='GMT' date -d '20 minutes ago' "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d '20 minutes ago' '+%M') '\na-a%10' | bc))00"
-#url="${url}2016/02/04/115000"
 for((x=0;x<$tiles;x++)); do 
     for((y=0;y<$tiles;y++)); do 
         echo "${url}_${x}_${y}.png -O $x$y.png -q"; 
