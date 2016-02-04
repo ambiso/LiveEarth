@@ -1,2 +1,2 @@
 # LiveEarth
-Get a live view of the earth on your desktop background
+Get a live view of the earth on your gnome desktop
