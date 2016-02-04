@@ -2,7 +2,7 @@
 set -ue
 #CONFIGURATION
 workdir="$HOME/.bg/" #EMPTY working directory
-tiles=8
+tiles=4
 url="http://himawari8-dl.nict.go.jp/himawari8/img/D531106/${tiles}d/550/"
 outputfile="${workdir}final.png"
 
