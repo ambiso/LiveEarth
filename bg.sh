@@ -4,6 +4,7 @@ set -ue
 workdir="$HOME/.bg/" #EMPTY working directory
 tiles=4
 url="http://himawari8-dl.nict.go.jp/himawari8/img/D531106/${tiles}d/550/"
+delay=20
 outputfile="${workdir}final.png"
 
 #DEPENDENCIES
@@ -25,7 +26,7 @@ function cleanup {
 cleanup
 
 echo "Download"
-url="${url}$(TZ='GMT' date -d '30 minutes ago' "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d '30 minutes ago' '+%M') '\na-a%10' | bc))00"
+url="${url}$(TZ='GMT' date -d "$delay minutes ago" "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d "$delay minutes ago" '+%M') '\na-a%10' | bc))00"
 for((x=0;x<$tiles;x++)); do 
     for((y=0;y<$tiles;y++)); do 
         echo "${url}_${x}_${y}.png -q -O" "$workdir$x$y.png"; 
@@ -41,5 +42,4 @@ montage -tile ${tiles} -geometry +0+0 $(
 cleanup
 
 echo "Set background"
-gsettings set org.gnome.desktop.background picture-uri "file://${outputfile}"
-gsettings set org.gnome.desktop.background picture-options 'scaled'
+feh --bg-max "${outputfile}"
