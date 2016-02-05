@@ -42,4 +42,5 @@ montage -tile ${tiles} -geometry +0+0 $(
 cleanup
 
 echo "Set background"
-feh --bg-max "${outputfile}"
+gsettings set org.gnome.desktop.background picture-uri "file://${outputfile}"
+gsettings set org.gnome.desktop.background picture-options 'scaled'
