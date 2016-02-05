@@ -8,7 +8,7 @@ delay=20
 outputfile="${workdir}final.png"
 
 #DEPENDENCIES
-declare -a deps=("montage" "gsettings" "wget" "xargs")
+declare -a deps=("montage" "feh" "wget" "xargs")
 for i in "${deps[@]}"; do
     which $i > /dev/null || (echo I need "$i" to work; exit 1);
 done
