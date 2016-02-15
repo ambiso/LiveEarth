@@ -4,7 +4,7 @@ set -ue
 workdir="$HOME/.bg/" #EMPTY working directory
 tiles=4 #Size of image: 1 2 4 8 16
 url="http://himawari8-dl.nict.go.jp/himawari8/img/D531106/${tiles}d/550/"
-delay=20
+delay=120 #Images are only available after a certain (varying) delay
 outputfile="${workdir}final.png"
 
 #DEPENDENCIES
@@ -32,6 +32,16 @@ for((x=0;x<$tiles;x++)); do
         echo "${url}_${x}_${y}.png -q -O" "$workdir${x}_${y}.png"; 
     done; 
 done | xargs -P 32 -n 4 wget || (echo "Failed to download images"; exit 1)
+
+echo "Check files"
+for((x=0;x<$tiles;x++)); do
+    for((y=0;y<$tiles;y++)); do
+        if [ $(sha512sum "$workdir${x}_${y}.png" | awk '{print $1}') == '4de86fff28860a348f5db6c8e838ca7de0d0f82acce8c9087734d97d287e806142caf3fe93ed0ecf6e998ff30701a077adc01927c07accd43b0b9e1ca26ebc34' ]; then #Hash of "No image"-image
+            echo "At least one image empty; aborting"
+            exit 1
+        fi
+    done
+done
 
 echo "Merge"
 montage -tile ${tiles} -geometry +0+0 $(
