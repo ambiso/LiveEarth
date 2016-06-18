@@ -8,7 +8,10 @@ delay=120 #Images are only available after a certain (varying) delay
 outputfile="${workdir}final.png"
 
 #DEPENDENCIES
-declare -a deps=("montage" "feh" "wget" "xargs")
+declare -a deps=("montage" "wget" "xargs")
+if [ "$(uname)" != "Darwin" ]; then
+  deps+=("feh")
+fi
 for i in "${deps[@]}"; do
     which $i > /dev/null || (echo I need "$i" to work; exit 1);
 done
@@ -54,4 +57,8 @@ cleanup
 echo "Set background"
 #gsettings set org.gnome.desktop.background picture-uri "file://${outputfile}"
 #gsettings set org.gnome.desktop.background picture-options 'scaled'
-feh --bg-max "${outputfile}"
+if [ "$(uname)" == "Darwin" ]; then
+  osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"${outputfile}\""
+else
+  feh --bg-max "${outputfile}"
+fi
