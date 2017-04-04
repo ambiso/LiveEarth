@@ -13,7 +13,7 @@ if [ "$(uname)" != "Darwin" ]; then
   deps+=("feh")
 fi
 for i in "${deps[@]}"; do
-    which $i > /dev/null || (echo I need "$i" to work; exit 1);
+    which $i > /dev/null || (echo Please install "$i" for me to work; exit 1);
 done
 
 #SCRIPT
