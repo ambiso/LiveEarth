@@ -29,7 +29,8 @@ function cleanup {
 cleanup
 
 echo "Download"
-url="${url}$(TZ='GMT' date -d "$delay minutes ago" "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d "$delay minutes ago" '+%M') '\na-a%10' | bc))00"
+time="$(date +%s -d "$delay minutes ago")"
+url="${url}$(TZ='GMT' date -d "@${time}" "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d "@${time}" '+%M') '\na-a%10' | bc))00"
 for((x=0;x<$tiles;x++)); do 
     for((y=0;y<$tiles;y++)); do 
         echo "${url}_${x}_${y}.png -q -O" "$workdir${x}_${y}.png"; 
