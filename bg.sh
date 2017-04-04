@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ue
 #CONFIGURATION
-workdir="$HOME/.bg/" #EMPTY working directory
+workdir="$HOME/.bg/" #Clobberful working directory
 tiles=4 #Size of image: 1 2 4 8 16
 url="http://himawari8-dl.nict.go.jp/himawari8/img/D531106/${tiles}d/550/"
 delay=120 #Images are only available after a certain (varying) delay
@@ -23,6 +23,8 @@ function cleanup {
                 for((y=0;y<$tiles;y++)); do
                     echo "$workdir${x}_${y}.png"; done; done)
 }
+
+echo Working directory: "${workdir}"
 
 [ -d "$workdir" ] || (mkdir "$workdir" && echo "Created $workdir")
 
