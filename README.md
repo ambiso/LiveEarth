@@ -2,7 +2,7 @@
 
 Get a live view of the earth on your desktop:
 
-![Desktop screenshot](./demo.png)
+![Desktop screenshot](./demo.jpg)
 
 ## Usage:
 
