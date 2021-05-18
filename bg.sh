@@ -3,12 +3,13 @@ set -ue
 #CONFIGURATION
 workdir="$HOME/.bg/" #Clobberful working directory
 tiles=4 #Size of image: 1 2 4 8 16
-url="http://himawari8-dl.nict.go.jp/himawari8/img/D531106/${tiles}d/550/"
-delay=120 #Images are only available after a certain (varying) delay
+#    https://himawari8.nict.go.jp/img/D531106/2d/550/2021/05/18/062000_1_0.png
+url="https://himawari8.nict.go.jp/img/D531106/${tiles}d/550/"
+delay=20 #Images are only available after a certain (varying) delay
 outputfile="${workdir}final.png"
 
 #DEPENDENCIES
-declare -a deps=("montage" "wget" "xargs")
+declare -a deps=("montage" "curl" "xargs")
 if [ "$(uname)" != "Darwin" ]; then
   deps+=("feh")
 fi
@@ -35,9 +36,9 @@ time="$(date +%s -d "$delay minutes ago")"
 url="${url}$(TZ='GMT' date -d "@${time}" "+%G/%m/%d/%H")$(printf '%02d' $(echo -e a=$(TZ='GMT' date -d "@${time}" '+%M') '\na-a%10' | bc))00"
 for((x=0;x<$tiles;x++)); do 
     for((y=0;y<$tiles;y++)); do 
-        echo "${url}_${x}_${y}.png -q -O" "$workdir${x}_${y}.png"; 
+        echo "${url}_${x}_${y}.png -sk -o" "$workdir${x}_${y}.png"; 
     done; 
-done | xargs -P 32 -n 4 wget || (echo "Failed to download images"; exit 1)
+done | xargs -P 32 -n 4 curl || (echo "Failed to download images"; exit 1)
 
 echo "Check files"
 for((x=0;x<$tiles;x++)); do
@@ -58,10 +59,13 @@ montage -tile ${tiles} -geometry +0+0 $(
 cleanup
 
 echo "Set background"
-#gsettings set org.gnome.desktop.background picture-uri "file://${outputfile}"
-#gsettings set org.gnome.desktop.background picture-options 'scaled'
 if [ "$(uname)" == "Darwin" ]; then
-  osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"${outputfile}\""
+    osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"${outputfile}\""
+elif [ "$DESKTOP_SESSION" == "gnome" ]; then
+    echo Setting gnome background
+    gsettings set org.gnome.desktop.background picture-uri "file://${outputfile}"
+    gsettings set org.gnome.desktop.background picture-options 'scaled'
 else
-  feh --bg-max "${outputfile}"
+    echo Using feh
+    feh --bg-max "${outputfile}"
 fi

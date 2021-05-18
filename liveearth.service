@@ -1,0 +1,8 @@
+[Unit]
+Description=Live Earth Background
+
+[Service]
+ExecStart=%h/.local/bin/bg.sh
+
+[Install]
+WantedBy=default.target
